@@ -50,7 +50,7 @@ elif command == "recv":
             pass #retry over and over
     print "From",host[0]
     recvsock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-    recvsock.bind(('',PORT)
+    recvsock.bind(('',PORT))
     recvsock.listen(1) 
     s.send('ready',host)
     conn,addr = recvsock.accept()
