@@ -25,7 +25,9 @@ if command == "send":
         print "Sending notification..."
         s.sendto(filename,BROADCAST)
         try:
-            data,host = s.recvfrom(BUFFER_SIZE)
+            data = filename
+            while data == filename:
+                data,host = s.recvfrom(BUFFER_SIZE)
         except socket.timeout:
             pass #just retry over and over in event of timeout
         else:
@@ -34,7 +36,7 @@ if command == "send":
                 print data,host
                 sendsock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
                 sendsock.connect(host)
-                f = open(recvname,"rb")
+                f = open(filename,"rb")
                 sendsock.send(f.read())
                 sendsock.close()
                 f.close()
@@ -52,7 +54,7 @@ elif command == "recv":
     recvsock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     recvsock.bind(('',PORT))
     recvsock.listen(1) 
-    s.send('ready',host)
+    s.sendto('ready',host)
     conn,addr = recvsock.accept()
     f = open(recvname,"wb")
     while True:
